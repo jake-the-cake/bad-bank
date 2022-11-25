@@ -1,0 +1,95 @@
+:root {
+  --ltblue: hsl(198, 55%, 55%);
+  --dkblue: hsl(222, 64%, 38%);
+  --offwhite: hsl(236, 100%, 95%);
+  --yellow: hsl(65, 86%, 72%);
+  
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--offwhite);
+  margin: 0;
+  width: 100%;
+}
+
+a {
+  border: none;
+  outline: none;
+}
+
+.page__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.header__container {
+  background: linear-gradient(to right, var(--ltblue), var(--dkblue));
+  padding: .2rem 1rem;
+  position: relative;
+  height: 3.6rem;
+  overflow: hidden;
+}
+
+.header__title--letters {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  position: absolute;
+  top: -1.1rem;
+  left: .8rem;
+  font-size: 5rem;
+  letter-spacing: -14px;
+  font-weight: 900;
+  color: var(--dkblue);
+}
+
+.header__title--text {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: var(--yellow);
+  font-weight: 700;
+  font-size: 1.5rem;
+  font-style: italic;
+  opacity: .6;
+  position: absolute;
+  bottom: 0px;
+  left: .1rem;
+  z-index: 10;
+}
+
+.header__links--container {
+  position: absolute;
+  right: 1rem;
+  bottom: .5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.header__link--text, .header__link--active {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.header__link--text:hover {
+  color: var(--yellow);
+}
+
+.header__link--text {
+  color: var(--offwhite);
+  text-shadow: 1px 2px 3px var(--ltblue);
+}
+
+.header__link--active {
+  color: var(--ltblue);
+}
+
+.content__container {
+  display: flex;
+  flex: 1;
+}
