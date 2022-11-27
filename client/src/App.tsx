@@ -5,9 +5,14 @@ import { MainCard } from './components/MainCard'
 import { Navbar } from './components/Navbar'
 import { SideCard } from './components/SideCard'
 import { PageContext, PageContextProps, userReducer } from './context/UserContext'
+import { Deposit } from './pages/Deposit'
+import { History } from './pages/History'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Logout } from './pages/Logout'
+import { Signup } from './pages/Signup'
+import { Transfer } from './pages/Transfer'
+import { Withdraw } from './pages/Withdraw'
 
 
 const initialContext: PageContextProps = {
@@ -29,12 +34,12 @@ export default () => {
         <SideCard side='left' />
         <Routes>
           <Route path='/' element={ <Home /> } />
-          <Route path='/deposit' element={ <>deposit</> } />
-          <Route path='/withdraw' element={ <>withdraw</> } />
-          <Route path='/transfer' element={ <>transfer</> } />
-          <Route path='/transactions' element={ <>transactions</> } />
+          <Route path='/deposit' element={ <Deposit /> } />
+          <Route path='/withdraw' element={ <Withdraw /> } />
+          <Route path='/transfer' element={ <Transfer/> } />
+          <Route path='/transactions' element={ <History /> } />
           <Route path='/login' element={ <Login /> } />
-          <Route path='/signup' element={ <MainCard title="sign up" content={<>Sign up</>} /> } />
+          <Route path='/signup' element={ <Signup /> } />
           <Route path='/quit' element={ <Logout /> } />
         </Routes>
         <SideCard side='right' />

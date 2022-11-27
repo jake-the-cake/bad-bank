@@ -10,7 +10,7 @@ interface NavLinkProps {
 const publicLinks: NavLinkProps[] = [
   {
     url: '/signup',
-    text: 'sign up'
+    text: 'create an account'
   },{
     url: '/login',
     text: 'log in'

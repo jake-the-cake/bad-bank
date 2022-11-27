@@ -57,6 +57,16 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
           message: 'User not found.'
         }
       }
+    case 'LOGIN_DENIED':
+      console.log( 'wrong password' )
+      return {
+        loginState: false,
+        details: undefined,
+        errors: {
+          type: 'AuthErr',
+          message: 'Invalid password entered.'
+        }
+      }
     default:
       console.log( 'default action: userReducer' )
       return {
