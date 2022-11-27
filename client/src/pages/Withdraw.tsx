@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
+import { TransactionForm } from '../components/TransactionForm'
 import { PageContext } from '../context/UserContext'
 import { changeActiveLink } from '../functions/changeActiveLink'
 
@@ -20,9 +21,20 @@ export const Withdraw = () => {
     <MainCard
       title='Make a Withdrawal'
       content={
-        <>
-          Withdraw Page
-        </>
+        <TransactionForm
+          fromAccount={[{
+            type: 'user',
+            id: 'user',
+            name: 'My B.A.D. Account',
+            balance: 50
+          }]}
+          toAccount={[{
+            type: 'cash',
+            id: 'cash',
+            name: 'Internet Cash Account',
+            balance: 1000000000
+          }]}
+        />
       }
     />
   )
