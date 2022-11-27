@@ -14,9 +14,9 @@
   - Mongodb as the data store
   - AWS S3 Bucket
   - Docker
-Features:
+## Features:
   - Create accounts and log in and out of them.
   - Deposit, withdraw, or transfer funds between accounts.
   [] - Running transaction list
-License:
+## License:
   - MIT
