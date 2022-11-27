@@ -37,7 +37,7 @@ const privateLinks: NavLinkProps[] = [
 ]
 
 const NavLink = ({ text, url }: NavLinkProps ) => {
-  const ctx = useContext( PageContext )
+  // const ctx = useContext( PageContext )
 
   const href = window.location.pathname
   let status = 'text'
@@ -58,16 +58,7 @@ const NavLink = ({ text, url }: NavLinkProps ) => {
 
 export const Navbar = () => {
   const ctx = useContext( PageContext )
-  console.log( ctx.user )
-
-  // show links based on login state
-  const links = () => {
-    return (
-      ( ctx.user.loginState && ctx.user.url === window.location.pathname )
-        ? privateLinks
-        : publicLinks
-    )
-  }
+  // console.log( ctx.user )
 
   return (
     <div className='header__container'>
@@ -77,7 +68,7 @@ export const Navbar = () => {
       </Link>
       <div className='header__links--container'>
       {
-        ( ctx.user.loginState ? privateLinks : publicLinks ).map(( link: NavLinkProps ) => (
+        (( ctx.user.loginState && ctx.user.url ) ? privateLinks : publicLinks ).map(( link: NavLinkProps ) => (
           <NavLink 
             url={ link.url }
             text={ link.text }

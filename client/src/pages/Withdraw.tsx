@@ -1,16 +1,21 @@
 import React, { useContext } from 'react'
+import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { PageContext } from '../context/UserContext'
+import { changeActiveLink } from '../functions/changeActiveLink'
 
 export const Withdraw = () => {
   const ctx = useContext( PageContext )
-  if ( ctx.user.url !== '/withdraw' ) {
-    ctx.dispatch({ type: 'CHANGE_PAGE', data: {
-      url: window.location.pathname
-    } })
-  }
-  console.log( ctx.user )
-  console.log( window.location.pathname )
+  const navigate = useNavigate()
+
+  changeActiveLink(
+    window.location.pathname,
+    ctx.user.url,
+    ctx.dispatch
+  )
+
+   if ( ctx.user.loginState !== true ) navigate( '/login' )
+
   return (
     <MainCard
       title='Make a Withdrawal'

@@ -1,10 +1,10 @@
 import React, { Dispatch, useReducer } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Footer } from './components/Footer'
-import { MainCard } from './components/MainCard'
 import { Navbar } from './components/Navbar'
 import { SideCard } from './components/SideCard'
 import { PageContext, PageContextProps, userReducer } from './context/UserContext'
+import { Dashboard } from './pages/Dashboard'
 import { Deposit } from './pages/Deposit'
 import { History } from './pages/History'
 import { Home } from './pages/Home'
@@ -18,7 +18,8 @@ import { Withdraw } from './pages/Withdraw'
 const initialContext: PageContextProps = {
   loginState: false,
   details: undefined,
-  errors: undefined
+  errors: undefined,
+  url: window.location.pathname
 }
 
 export default () => {
@@ -34,6 +35,7 @@ export default () => {
         <SideCard side='left' />
         <Routes>
           <Route path='/' element={ <Home /> } />
+          <Route path='/dashboard' element={ <Dashboard /> } />
           <Route path='/deposit' element={ <Deposit /> } />
           <Route path='/withdraw' element={ <Withdraw /> } />
           <Route path='/transfer' element={ <Transfer/> } />
