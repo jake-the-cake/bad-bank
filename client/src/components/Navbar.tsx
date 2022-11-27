@@ -63,7 +63,7 @@ export const Navbar = () => {
   // show links based on login state
   const links = () => {
     return (
-      ctx.user.loginState
+      ( ctx.user.loginState && ctx.user.url === window.location.pathname )
         ? privateLinks
         : publicLinks
     )

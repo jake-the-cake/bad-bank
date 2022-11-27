@@ -23,17 +23,20 @@ export interface PageContextProps {
   loginState: boolean
   details?: UserDetails
   errors?: ErrorDetails
+  url?: string
 }
 
 // page reducer
 export const userReducer = ( state: PageContextProps, action: any ) => {
+  state.url = action.data.url
   switch ( action.type ) {
     case 'LOGOUT_SUCCESS':
       console.log( 'logout success' )
       return {
         loginState: false,
         details: undefined,
-        errors: undefined
+        errors: undefined,
+        url: state.url
       }
     case 'LOGIN_SUCCESS':
       console.log( 'login success' )
@@ -45,7 +48,8 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
           password: '123456',
           recentHistory: []
         },
-        errors: undefined
+        errors: undefined,
+        url: state.url
       }
     case 'LOGIN_404':
       console.log( 'login not found' )
@@ -55,7 +59,8 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         errors: {
           type: 'NotFound',
           message: 'User not found.'
-        }
+        },
+        url: state.url
       }
     case 'LOGIN_DENIED':
       console.log( 'wrong password' )
@@ -65,8 +70,13 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         errors: {
           type: 'AuthErr',
           message: 'Invalid password entered.'
-        }
+        },
+        url: state.url
       }
+    case 'CHANGE_PAGE':
+      console.log( 'switched pages' )
+      console.log( action.data )
+      return state
     default:
       console.log( 'default action: userReducer' )
       return {

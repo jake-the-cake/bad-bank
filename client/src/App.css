@@ -150,7 +150,7 @@ a {
 }
 
 .side__container {
-  background-color: hsl(198 55% 55% / .6);
+  background-color: hsl(198 55% 55% / .2);
   padding: .5rem;
   position: relative;
   border-radius: .5rem;
