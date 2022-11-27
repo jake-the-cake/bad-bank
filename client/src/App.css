@@ -64,7 +64,7 @@ a {
 .header__links--container {
   position: absolute;
   right: 1rem;
-  bottom: .5rem;
+  bottom: .2rem;
   display: flex;
   gap: 1rem;
 }

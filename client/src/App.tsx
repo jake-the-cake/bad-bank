@@ -1,43 +1,25 @@
-import React, { Context, createContext, useReducer } from 'react'
+import React, { Dispatch, useReducer } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
+import { PageContext, PageContextProps, userReducer } from './context/UserContext'
+import { Login404Button, LoginDeniedButton, LoginToggleButton } from './dev/LoginToggle'
 
 
-interface PageContextProps {
-  reducer?: any[]
-  loginState: boolean
+const initialContext: PageContextProps = {
+  loginState: false,
+  details: undefined,
+  errors: undefined
 }
-
-// page reducer
-const reducer = ( state, action ) => {
-  switch ( action.type ) {
-    case 'LOGIN_SUCCESS':
-      console.log('success?')
-      break
-    default:
-      return state
-  }
-}
-
-// page context
-export const PageContext: Context<PageContextProps> | Context<any> = createContext( {} )
 
 export default () => {
-  // const [ user, dispatch ] = useReducer( reducer, {
-  //   state: {
-  //     loginState: false
-  //   },
-  //   action: 'none'
-  // } )
+  const [ user, dispatch ]: [ PageContextProps, Dispatch<PageContextProps> ] = useReducer( userReducer, initialContext )
 
-  // dispatch({type: 'LOGIN_SUCCESS'})
-
+  console.log( typeof user )
 
   // JSX Element to return
   return (
     <PageContext.Provider value={{
-      // reducer: [ user, dispatch ],
-      loginState: false
+      user, dispatch
     }}>
       <Navbar />
       {
@@ -45,19 +27,9 @@ export default () => {
       }
       <div className='content__container'>
         <div className=''>
-          <PageContext.Consumer>
-            {
-              value => {
-                return (
-                  <button onClick={ ( e ) => {
-                    e.preventDefault()
-                    console.info( 'the left button was clicked' )
-                    value.loginState = !value.loginState
-                  }}>Button</button>
-                )
-              }
-            }
-          </PageContext.Consumer>
+          <LoginToggleButton />
+          <Login404Button />
+          <LoginDeniedButton />
         </div>
         <div className=''>
           <Routes>

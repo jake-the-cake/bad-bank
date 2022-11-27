@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { Dispatch, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { PageContext } from '../App'
+import { PageContext } from '../context/UserContext'
 
 interface NavLinkProps {
-  url: string,
+  url: string
   text: string
+  callback?: ({ d }: { d: Dispatch<any> }) => void
 }
 
 const publicLinks: NavLinkProps[] = [
@@ -13,7 +14,11 @@ const publicLinks: NavLinkProps[] = [
     text: 'sign up'
   },{
     url: '/login',
-    text: 'log in'
+    text: 'log in',
+    callback: ({ d }) => {
+      d({ type: 'LOGIN_SUCCESS' })
+      console.log( d )
+    }
   }
 ]
 
@@ -32,11 +37,16 @@ const privateLinks: NavLinkProps[] = [
     text: 'account history'
   },{
     url: '/quit',
-    text: 'quit'
+    text: 'quit',
+    callback: ({ d }) => {
+      d({ type: 'LOGOUT_SUCCESS' })
+    }
   }
 ]
 
-const NavLink = ({ text, url }: NavLinkProps ) => {
+const NavLink = ({ text, url, callback }: NavLinkProps ) => {
+  const ctx = useContext( PageContext )
+
   const href = window.location.pathname
   let status = 'text'
   if ( href === `${ url }`) {
@@ -55,13 +65,13 @@ const NavLink = ({ text, url }: NavLinkProps ) => {
 }
 
 export const Navbar = () => {
-  const { loginState } = useContext( PageContext )
-  console.log( 'does this render?' )
+  const ctx = useContext( PageContext )
+  console.log( ctx )
 
   // show links based on login state
   const links = () => {
     return (
-      loginState
+      ctx.user.loginState
         ? privateLinks
         : publicLinks
     )
@@ -75,7 +85,7 @@ export const Navbar = () => {
       </Link>
       <div className='header__links--container'>
       {
-        links().map(( link: NavLinkProps ) => (
+        ( ctx.user.loginState ? privateLinks : publicLinks ).map(( link: NavLinkProps ) => (
           <NavLink 
             url={ link.url }
             text={ link.text }
