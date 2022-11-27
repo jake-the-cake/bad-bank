@@ -5,7 +5,6 @@ import { PageContext } from '../context/UserContext'
 interface NavLinkProps {
   url: string
   text: string
-  callback?: ({ d }: { d: Dispatch<any> }) => void
 }
 
 const publicLinks: NavLinkProps[] = [
@@ -14,11 +13,7 @@ const publicLinks: NavLinkProps[] = [
     text: 'sign up'
   },{
     url: '/login',
-    text: 'log in',
-    callback: ({ d }) => {
-      d({ type: 'LOGIN_SUCCESS' })
-      console.log( d )
-    }
+    text: 'log in'
   }
 ]
 
@@ -37,14 +32,11 @@ const privateLinks: NavLinkProps[] = [
     text: 'account history'
   },{
     url: '/quit',
-    text: 'quit',
-    callback: ({ d }) => {
-      d({ type: 'LOGOUT_SUCCESS' })
-    }
+    text: 'quit'
   }
 ]
 
-const NavLink = ({ text, url, callback }: NavLinkProps ) => {
+const NavLink = ({ text, url }: NavLinkProps ) => {
   const ctx = useContext( PageContext )
 
   const href = window.location.pathname
@@ -66,7 +58,7 @@ const NavLink = ({ text, url, callback }: NavLinkProps ) => {
 
 export const Navbar = () => {
   const ctx = useContext( PageContext )
-  console.log( ctx )
+  console.log( ctx.user )
 
   // show links based on login state
   const links = () => {

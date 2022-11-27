@@ -14,6 +14,7 @@ body {
   background-color: var(--offwhite);
   margin: 0;
   width: 100%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 a {
@@ -92,4 +93,81 @@ a {
 .content__container {
   display: flex;
   flex: 1;
+  gap: 1rem;
+}
+
+.main__container {
+  flex: 1;
+  border: 2px solid var(--dkblue);
+  background-color: whitesmoke;
+  border-radius: .5rem;
+  padding: 1rem;
+  font-size: 1.3rem;
+}
+
+.main__container--title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--dkblue);
+} 
+
+.main__container--subtitle {
+  font-size: 1.4rem;
+  color: var(--ltblue);
+  font-style: italic;
+}
+
+.main__container--content {
+  margin-top: .5rem;
+  border-top: 1px solid var(--yellow);
+  padding-top: .8rem;
+}
+
+.text {
+  display: block;
+}
+
+.buttons__horizontal {
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  padding: 1rem;
+  border: 1px solid hsl(0 0% 0% / .3);
+  background-color: var(--offwhite);
+  margin: 1rem auto;
+  width: fit-content;
+}
+
+.buttons__horizontal button {
+  background-color: var(--dkblue);
+  cursor: pointer;
+  padding: .5rem 1rem;
+  color: var(--offwhite);
+  border-radius: 9999px;
+  border: 1ps solid var(--ltblue);
+  outline: none;
+}
+
+.side__container {
+  background-color: hsl(198 55% 55% / .6);
+  padding: .5rem;
+  position: relative;
+  border-radius: .5rem;
+  overflow: hidden;
+}
+
+.side__container--left {
+  border-radius: 0 .5rem .5rem 0;
+}
+.side__container--right {
+  border-radius: .5rem 0 0 .5rem;
+}
+
+.footer__container {
+  background-color: var(--dkblue);
+  border-top: 3px solid var(--yellow);
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  color: var(--offwhite);
 }
