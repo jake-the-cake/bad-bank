@@ -21,9 +21,9 @@ export type ErrorDetails = {
 
 export interface PageContextProps {
   loginState: boolean
-  details?: UserDetails
-  errors?: ErrorDetails
-  url?: string
+  details?: UserDetails | undefined
+  errors?: ErrorDetails | undefined
+  url?: string | undefined
 }
 
 // page reducer

@@ -23,7 +23,7 @@ const initialContext: PageContextProps = {
 }
 
 export default () => {
-  const [ user, dispatch ]: [ PageContextProps, Dispatch<PageContextProps> ] = useReducer( userReducer, initialContext )
+  const [ user, dispatch ]: [ PageContextProps | unknown, Dispatch<PageContextProps> ] = useReducer<any>( userReducer, initialContext )
 
   // JSX Element to return
   return (
