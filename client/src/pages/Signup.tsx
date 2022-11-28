@@ -17,22 +17,28 @@ export const Signup = () => {
 
   if ( ctx.user.loginState === true ) navigate( '/dashboard' )
   
-    const handleRegister =  async ( event: any ) => {
+    const handleRegister =  ( event: any ) => {
       event.preventDefault()
-      const username = document.getElementById( 'username' )
-      const email = document.getElementById( 'email' )
-      const password = document.getElementById( 'password' )
+      const username = document.getElementById( 'username' ) as HTMLInputElement
+      const email = document.getElementById( 'email' ) as HTMLInputElement
+      const password = document.getElementById( 'password' ) as HTMLInputElement
       try {
-        const res = await axios.post( 'http://localhost:4200/users/add', {
-          username,
-          email,
-          password
-        })
-        const data = res.data
-        console.log( data )
+        fetch( 'http://localhost:4200/users/add', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "username": username.value,
+            "email": email.value,
+            "password": password.value
+          })
+        }).then( res => res.json() ).then( data => data ).catch( err => console.error( err.message ))
       }
       catch ( err ) {
         console.log( err.message )
+        console.log( err )
       }
     }
 

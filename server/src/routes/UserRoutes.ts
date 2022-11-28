@@ -10,6 +10,7 @@ router.get( '/viewall', async ( req, res ) => {
 
 router.post( '/add', ( req, res ) => {
   const { username, email, password } = req.body
+  console.log( req.body )
   const newUser = new UserModel({
     username,
     email,
