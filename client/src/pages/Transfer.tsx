@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { TransactionForm } from '../components/TransactionForm'
@@ -8,6 +8,32 @@ import { changeActiveLink } from '../functions/changeActiveLink'
 export const Transfer = () => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
+  const [ accounts, setAccounts ] = useState( [] )
+
+  useEffect(() => {
+    fetch( 'http://localhost:4200/users/viewall', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then( res => res.json() )
+    .then( data => {
+      const arr: any = []
+      Array.from( data ).forEach(( d: any ) => {
+        arr.push({
+          type: 'real',
+          id: d._id,
+          name: d.username,
+          balance: 10
+        })
+      })
+      // console.log( data )
+      setAccounts( arr )
+    })
+    .catch( err => console.error( err.message ))
+  }, [])
 
   changeActiveLink(
     window.location.pathname,
@@ -31,19 +57,7 @@ export const Transfer = () => {
             name: 'My B.A.D. Account',
             balance: 50
           }]}
-          toAccount={[
-            {
-              type: 'cash',
-              id: 'cash',
-              name: 'Internet Cash Account',
-              balance: 1000000000
-            },{
-              type: 'cash',
-              id: 'cash',
-              name: 'Other Cash Account',
-              balance: 1000000000
-            },
-          ]}
+          toAccount={ accounts }
         />
       }
     />

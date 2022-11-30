@@ -36,7 +36,6 @@ export const Signup = () => {
       })
       .then( res => res.json() )
       .then( data => {
-        console.log( data )
         setIsSubmitted( true )
       })
       .catch( err => console.error( err.message ))
@@ -50,7 +49,19 @@ export const Signup = () => {
           title="Success"
           subtitle="Your account has been added"
           content={
-            <>Yup</>
+            <>
+              <div className='form__container'>
+                What would you like to do now?
+              </div>
+              <div className='buttons__horizontal'>
+                <button onClick={ () => {
+                  setIsSubmitted( false )
+                }}>Create Another Account</button>
+                <button onClick={ () => {
+                  ctx.dispatch({ type: 'LOGIN_SUCCESS' })
+                }} className='button__secondary'>Start Banking</button>
+              </div>
+            </>
           }
         />
       : <MainCard

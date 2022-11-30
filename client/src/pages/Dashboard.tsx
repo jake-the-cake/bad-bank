@@ -21,7 +21,13 @@ export const Dashboard = () => {
       title='Account Overview'
       content={
         <>
-          Dashboard Page 
+          Thank you for your continued trust in B.A.D. Bank. select a function to continue.
+          <div className='buttons__horizontal'>  
+            <button onClick={ () => navigate( '/deposit' ) }>Deposit</button>
+            <button onClick={ () => navigate( '/withdraw' )}>Withdraw</button>
+            <button onClick={ () => navigate( '/transfer' )}>Transfer</button>
+            <button onClick={ () => navigate( '/transactions' )} className='button__secondary'>Account Balance</button>
+          </div>  
         </>
       }
     />

@@ -23,6 +23,7 @@ router.get('/viewall', (req, res) => __awaiter(void 0, void 0, void 0, function*
 }));
 router.post('/add', (req, res) => {
     const { username, email, password } = req.body;
+    console.log(req.body);
     const newUser = new UserModel_1.UserModel({
         username,
         email,
