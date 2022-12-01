@@ -8,7 +8,16 @@ export const LoginToggleButton = () => {
       e.preventDefault()
       switch ( ctx.user.loginState ) {
         case false:
-          ctx.dispatch({ type: 'LOGIN_SUCCESS' })
+          ctx.dispatch({ 
+            type: 'LOGIN_SUCCESS',
+            data: {
+              username: 'jake',
+              email: 'askjake331@gmail.com',
+              password: '123456',
+              balance: 152.25,
+              recentHistory: []
+            }
+          })
           break
         case true:
           ctx.dispatch({ type: 'LOGOUT_SUCCESS' })

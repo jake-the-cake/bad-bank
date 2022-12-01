@@ -3,6 +3,8 @@ import Mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import { UserRouter } from './routes/UserRoutes'
+import { AuthRouter } from './routes/AuthRoutes'
+import { TransactionRouter } from './routes/TransactionRoutes'
 
 const app = Express()
 dotenv.config()
@@ -13,6 +15,8 @@ app.use( Express.urlencoded({ extended: true }))
 
 // routes
 app.use( '/users', UserRouter )
+app.use( '/auth', AuthRouter )
+app.use( '/transaction', TransactionRouter )
 
 // default page
 app.get( '/', (req,res) => {

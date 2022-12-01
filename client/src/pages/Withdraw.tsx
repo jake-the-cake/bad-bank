@@ -16,6 +16,8 @@ export const Withdraw = () => {
   )
 
    if ( ctx.user.loginState !== true ) navigate( '/login' )
+   console.log( ctx.user )
+   console.log( ctx.user.details )
 
   return (
     <MainCard
@@ -24,10 +26,10 @@ export const Withdraw = () => {
         <TransactionForm
           fromAccount={[{
             type: 'user',
-            id: 'user1234',
-            name: 'My B.A.D. Account',
-            balance: 50
-          }]}
+            id: ctx.user.details._id || '1234',
+            name: ctx.user.details.username,
+            balance: ctx.user.details.balance
+         }]}
           toAccount={[{
             type: 'cash',
             id: 'cash4321',

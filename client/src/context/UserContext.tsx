@@ -11,6 +11,7 @@ export type UserDetails = {
   name: string
   email: string
   password: string
+  balance: number
   recentHistory: TransactionDetails[]
 }
 
@@ -29,7 +30,6 @@ export interface PageContextProps {
 // page reducer
 export const userReducer = ( state: PageContextProps, action: any ) => {
   const newUrl = action.data?.url ?? state.url
-  console.log( state )
   switch ( action.type ) {
     case 'LOGOUT_SUCCESS':
       console.log( 'logout success' )
@@ -41,15 +41,10 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
       }
     case 'LOGIN_SUCCESS':
       console.log( 'login success' )
+      console.log( action.data )
       return {
         loginState: true,
-        details: {
-          name: 'jake',
-          email: 'askjake331@gmail.com',
-          password: '123456',
-          balance: 152.25,
-          recentHistory: []
-        },
+        details: action.data,
         errors: undefined,
         url: state.url
       }

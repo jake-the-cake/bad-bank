@@ -18,8 +18,25 @@ export const Login = () => {
 
     const handleLogin = ( event: any ) => {
       event.preventDefault()
-      const email = document.getElementById( 'email' )
-      const password = document.getElementById( 'password' )
+      const email = document.getElementById( 'email' ) as HTMLInputElement
+      const password = document.getElementById( 'password' ) as HTMLInputElement
+      fetch( 'http://localhost:4200/auth/login', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "email": email.value,
+          "password": password.value
+        })
+      })
+      .then( res => res.json() )
+      .then( data => {
+        console.log( data.statusCode )
+        ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })        
+      })
+      .catch( err => console.error( err.message ))
     }
 
   return (

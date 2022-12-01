@@ -1,5 +1,6 @@
-import React, { ReactNode, SelectHTMLAttributes, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { PageContext } from '../context/UserContext'
 
 type AccountDetails = {
   type: string
@@ -14,10 +15,12 @@ interface TransactionFormProps {
 }
 
 export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = ({ fromAccount, toAccount }) => {
+  const ctx = useContext( PageContext )
   const navigate = useNavigate()
 
-  const [ selectedFrom, setSelectedFrom ] = useState( '' )
+  // const [ selectedFrom, setSelectedFrom ] = useState( '' )
 
+  console.log( fromAccount )
 
   const formObject: any = {}
 
