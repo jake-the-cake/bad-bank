@@ -36,6 +36,14 @@ export const Signup = () => {
       })
       .then( res => res.json() )
       .then( data => {
+        const { username, email, password, balance } = data
+        ctx.user.details = {
+          username,
+          email,
+          password,
+          balance,
+          recentHistory: []
+        }
         setIsSubmitted( true )
       })
       .catch( err => console.error( err.message ))

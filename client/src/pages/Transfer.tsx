@@ -9,6 +9,14 @@ export const Transfer = () => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
   const [ accounts, setAccounts ] = useState( [] )
+  
+  changeActiveLink(
+    window.location.pathname,
+    ctx.user.url,
+    ctx.dispatch
+  )
+      
+  if ( ctx.user.loginState !== true ) navigate( '/login' )
 
   useEffect(() => {
     fetch( 'http://localhost:4200/users/viewall', {
@@ -26,37 +34,29 @@ export const Transfer = () => {
           type: 'real',
           id: d._id,
           name: d.username,
-          balance: 10
+          balance: d.balance
         })
       })
-      // console.log( data )
       setAccounts( arr )
     })
     .catch( err => console.error( err.message ))
   }, [])
 
-  changeActiveLink(
-    window.location.pathname,
-    ctx.user.url,
-    ctx.dispatch
-  )
-
-    console.log( ctx.user.loginState )
-
-  if ( ctx.user.loginState !== true ) navigate( '/login' )
-  
   return (
     <MainCard
       title='Transfer Money'
       subtitle='Select the destination account from the dropdown below.'
       content={
         <TransactionForm
-          fromAccount={[{
-            type: 'user',
-            id: 'user',
-            name: 'My B.A.D. Account',
-            balance: 50
-          }]}
+          fromAccount={ 
+            /*[{
+              type: 'user',
+              id: 'user',
+              name: 'My B.A.D. Account',
+              balance: 50
+            }] */
+            accounts
+          }
           toAccount={ accounts }
         />
       }

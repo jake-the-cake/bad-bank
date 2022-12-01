@@ -24,13 +24,13 @@ export const Withdraw = () => {
         <TransactionForm
           fromAccount={[{
             type: 'user',
-            id: 'user',
+            id: 'user1234',
             name: 'My B.A.D. Account',
             balance: 50
           }]}
           toAccount={[{
             type: 'cash',
-            id: 'cash',
+            id: 'cash4321',
             name: 'Internet Cash Account',
             balance: 1000000000
           }]}

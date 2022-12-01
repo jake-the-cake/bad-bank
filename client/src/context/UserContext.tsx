@@ -29,7 +29,7 @@ export interface PageContextProps {
 // page reducer
 export const userReducer = ( state: PageContextProps, action: any ) => {
   const newUrl = action.data?.url ?? state.url
-
+  console.log( state )
   switch ( action.type ) {
     case 'LOGOUT_SUCCESS':
       console.log( 'logout success' )
@@ -47,6 +47,7 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
           name: 'jake',
           email: 'askjake331@gmail.com',
           password: '123456',
+          balance: 152.25,
           recentHistory: []
         },
         errors: undefined,
