@@ -7,11 +7,11 @@ exports.TransactionModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Transaction = new mongoose_1.default.Schema({
     from: {
-        type: mongoose_1.default.Types.ObjectId,
+        type: Object,
         required: true,
     },
     to: {
-        type: mongoose_1.default.Types.ObjectId,
+        type: Object,
         required: true,
     },
     type: {

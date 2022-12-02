@@ -2,11 +2,11 @@ import Mongoose from 'mongoose'
 
 const Transaction = new Mongoose.Schema({
   from: {
-    type: Mongoose.Types.ObjectId || String,
+    type: Object,
     required: true,
   },
   to: {
-    type: Mongoose.Types.ObjectId || String,
+    type: Object,
     required: true,
   },
   type: {

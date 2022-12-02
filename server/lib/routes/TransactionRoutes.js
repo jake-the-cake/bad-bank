@@ -14,16 +14,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const TransactionModel_1 = require("../models/TransactionModel");
 const UserModel_1 = require("../models/UserModel");
 const router = express_1.default.Router();
 exports.TransactionRouter = router;
 router.get('/viewall', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield UserModel_1.UserModel.find();
-    res.status(200).json(users);
+    const transactions = yield TransactionModel_1.TransactionModel.find();
+    res.status(200).json(transactions);
 }));
-router.post('/deposit', (req, res) => {
-    const { id } = req.body;
+router.post('/deposit', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const { id, amount } = req.body;
     const resObj = { statusCode: 500 };
+    try {
+        const toAccount = yield UserModel_1.UserModel.findOne({ _id: id });
+        const newTransaction = new TransactionModel_1.TransactionModel({
+            from: {
+                type: 'cash',
+                id: 'cash',
+                name: 'Internet Cash Account',
+                balance: 1000000000
+            },
+            to: {
+                "type": 'real',
+                id,
+                "name": (_a = toAccount === null || toAccount === void 0 ? void 0 : toAccount.username) !== null && _a !== void 0 ? _a : 'My B.A.D. Account',
+                "balance": (_b = toAccount === null || toAccount === void 0 ? void 0 : toAccount.balance) !== null && _b !== void 0 ? _b : -1000000
+            },
+            amount,
+            type: 'deposit'
+        });
+        resObj.data = newTransaction;
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.push(resObj.data);
+        newTransaction.save();
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.update({
+            balamce: toAccount.balance += amount
+        });
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.save();
+        console.log(toAccount);
+    }
+    catch (err) {
+        resObj.error = {
+            type: 'SysErr',
+            message: 'Server error occurred.'
+        };
+        console.error(err);
+    }
     console.log(req.body);
     res.status(resObj.statusCode).json(resObj);
-});
+}));
