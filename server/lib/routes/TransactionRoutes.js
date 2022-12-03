@@ -50,7 +50,7 @@ router.post('/deposit', (req, res) => __awaiter(void 0, void 0, void 0, function
             type: 'deposit'
         });
         resObj.data = newTransaction;
-        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.push(resObj.data);
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.unshift(resObj.data);
         newTransaction.save();
         toAccount === null || toAccount === void 0 ? void 0 : toAccount.update({
             balance: toAccount.balance += amount
@@ -90,7 +90,7 @@ router.post('/withdraw', (req, res) => __awaiter(void 0, void 0, void 0, functio
             type: 'withdrawal'
         });
         resObj.data = newTransaction;
-        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.push(resObj.data);
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.unshift(resObj.data);
         newTransaction.save();
         toAccount === null || toAccount === void 0 ? void 0 : toAccount.update({
             balance: toAccount.balance -= amount
@@ -131,8 +131,8 @@ router.post('/transfer', (req, res) => __awaiter(void 0, void 0, void 0, functio
             type: 'transfer'
         });
         resObj.data = newTransaction;
-        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.push(resObj.data);
-        fromAccount === null || fromAccount === void 0 ? void 0 : fromAccount.transactions.push(resObj.data);
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.unshift(resObj.data);
+        fromAccount === null || fromAccount === void 0 ? void 0 : fromAccount.transactions.unshift(resObj.data);
         newTransaction.save();
         toAccount === null || toAccount === void 0 ? void 0 : toAccount.update({
             balance: toAccount.balance += amount

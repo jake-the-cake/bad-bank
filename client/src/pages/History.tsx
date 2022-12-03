@@ -15,13 +15,18 @@ export const History = () => {
   )
 
   if ( ctx.user.loginState !== true ) navigate( '/login' )
-  
+
   return (
     <MainCard
       title='Transaction History'
       content={
         <>
-          History Page 
+          {
+            ctx.user.details.transactions.map( h => {
+              const date = new Date( h.createdAt ).toDateString()
+              return <p>{ `$${ h.amount } ${ h.type } on ${ date }` }</p>
+            })
+          }
         </>
       }
     />

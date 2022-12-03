@@ -41,7 +41,7 @@ router.post( '/deposit', async ( req, res ) => {
     })
   
     resObj.data = newTransaction
-    toAccount?.transactions.push( resObj.data )
+    toAccount?.transactions.unshift( resObj.data )
     newTransaction.save()
     toAccount?.update({
       balance: toAccount.balance += amount
@@ -85,7 +85,7 @@ router.post( '/withdraw', async ( req, res ) => {
     })
   
     resObj.data = newTransaction
-    toAccount?.transactions.push( resObj.data )
+    toAccount?.transactions.unshift( resObj.data )
     newTransaction.save()
     toAccount?.update({
       balance: toAccount.balance -= amount
@@ -130,8 +130,8 @@ router.post( '/transfer', async ( req, res ) => {
     })
   
     resObj.data = newTransaction
-    toAccount?.transactions.push( resObj.data )
-    fromAccount?.transactions.push( resObj.data )
+    toAccount?.transactions.unshift( resObj.data )
+    fromAccount?.transactions.unshift( resObj.data )
     newTransaction.save()
     toAccount?.update({
       balance: toAccount.balance += amount
