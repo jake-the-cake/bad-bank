@@ -16,7 +16,7 @@ const User = new Mongoose.Schema({
     required: true
   },
   transactions: [{
-    type: Mongoose.Types.ObjectId
+    type: Object
   }],
   balance: {
     type: Number,

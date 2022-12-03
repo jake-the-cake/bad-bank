@@ -21,7 +21,7 @@ const User = new mongoose_1.default.Schema({
         required: true
     },
     transactions: [{
-            type: mongoose_1.default.Types.ObjectId
+            type: Object
         }],
     balance: {
         type: Number,

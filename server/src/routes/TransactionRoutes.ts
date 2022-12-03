@@ -38,10 +38,10 @@ router.post( '/deposit', async ( req, res ) => {
     toAccount?.transactions.push( resObj.data )
     newTransaction.save()
     toAccount?.update({
-      balamce: toAccount.balance += amount
+      balance: toAccount.balance += amount
     })
     toAccount?.save()
-    console.log( toAccount )
+    resObj.statusCode = 201
   }
   catch ( err: any ) {
     resObj.error = {
@@ -51,9 +51,6 @@ router.post( '/deposit', async ( req, res ) => {
     console.error( err )
   }
 
-
-
-  console.log( req.body )
   res.status( resObj.statusCode ).json( resObj )
 })
 

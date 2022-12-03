@@ -48,10 +48,10 @@ router.post('/deposit', (req, res) => __awaiter(void 0, void 0, void 0, function
         toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.push(resObj.data);
         newTransaction.save();
         toAccount === null || toAccount === void 0 ? void 0 : toAccount.update({
-            balamce: toAccount.balance += amount
+            balance: toAccount.balance += amount
         });
         toAccount === null || toAccount === void 0 ? void 0 : toAccount.save();
-        console.log(toAccount);
+        resObj.statusCode = 201;
     }
     catch (err) {
         resObj.error = {
@@ -60,6 +60,5 @@ router.post('/deposit', (req, res) => __awaiter(void 0, void 0, void 0, function
         };
         console.error(err);
     }
-    console.log(req.body);
     res.status(resObj.statusCode).json(resObj);
 }));

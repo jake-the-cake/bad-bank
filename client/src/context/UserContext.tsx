@@ -44,7 +44,10 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
       console.log( action.data )
       return {
         loginState: true,
-        details: action.data,
+        details: {
+          ...action.data,
+          recentHistory: []
+        },
         errors: undefined,
         url: state.url
       }

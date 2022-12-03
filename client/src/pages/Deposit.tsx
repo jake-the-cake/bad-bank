@@ -30,11 +30,11 @@ export const Deposit = () => {
             name: 'Internet Cash Account',
             balance: 1000000000
           }]}
-          toAccount={[{
-            type: 'user',
-            id: 'user',
-            name: 'My B.A.D. Account',
-            balance: 50
+          toAccount={[{   
+            type: 'real',
+            id: ctx.user.details._id || '1234',
+            name: ctx.user.details.username,
+            balance: ctx.user.details.balance
           }]}
         />
       }

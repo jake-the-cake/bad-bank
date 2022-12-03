@@ -28,6 +28,10 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
     formObject.type = 'Transfer'
     formObject.fromDisabled = false
     formObject.toDisabled = false
+    formObject.onClick = ( event: Event ) => {
+      event.preventDefault()
+      console.log( formObject.type )
+    }
   }
 
   if ( fromAccount.length === 1 ) {
@@ -36,11 +40,53 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
         formObject.type = 'Deposit'
         formObject.fromDisabled = true
         formObject.toDisabled = true
+        formObject.onClick = ( event: Event ) => {
+          const toId: string = ( document.getElementById( 'to' ) as HTMLSelectElement ).value
+          const amt: string = ( document.getElementById( 'amount' ) as HTMLInputElement ).value
+          event.preventDefault()
+          console.log( formObject.type )
+          fetch( 'http://localhost:4200/transaction/deposit', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "id": toId,
+              "amount": Number( amt )
+            })
+          })
+          .then( res => res.json() )
+          .then( data => {
+            console.log( data )
+            ctx.user.details.recentHistory.push( data.data )
+          })
+          .catch( err => console.error( err.message ))
+        }
         break
       case 'user':
         formObject.type = 'Withdrawal'
         formObject.fromDisabled = true
         formObject.toDisabled = true
+        formObject.onClick = ( event: Event ) => {
+          event.preventDefault()
+          console.log( formObject.type )
+          fetch( 'http://localhost:4200/transaction/withdraw', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            })
+          })
+          .then( res => res.json() )
+          .then( data => {
+            console.log( data.statusCode )
+            ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })        
+          })
+          .catch( err => console.error( err.message ))
+        }
         break
       default:
         break
@@ -81,10 +127,10 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
         ))
       }
       </select>
-      <label htmlFor='password'>{ formObject.type } Amount</label><
-      input id='password' placeholder={ `Current Balance: $ ${ formObject.balance }` } type="text" />
+      <label htmlFor='amount'>{ formObject.type } Amount</label>
+      <input id='amount' placeholder={ `Current Balance: $ ${ formObject.balance }` } type="text" />
       <div className='buttons__horizontal'>
-        <button>Make { formObject.type }</button>
+        <button onClick={ formObject.onClick }>Make { formObject.type }</button>
         <button className='button__secondary' onClick={ () => navigate( '/' ) }>Back</button>
       </div>
     </form>
