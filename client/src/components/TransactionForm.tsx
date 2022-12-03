@@ -20,7 +20,7 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
 
   // const [ selectedFrom, setSelectedFrom ] = useState( '' )
 
-  console.log( fromAccount )
+  // console.log( fromAccount )
 
   const formObject: any = {}
 

@@ -17,6 +17,8 @@ export const Signup = () => {
 
   if ( ctx.user.loginState === true ) navigate( '/dashboard' )
   
+  // let useId = 0
+
     const handleRegister =  ( event: any ) => {
       event.preventDefault()
       const username = document.getElementById( 'username' ) as HTMLInputElement
@@ -36,8 +38,9 @@ export const Signup = () => {
       })
       .then( res => res.json() )
       .then( data => {
-        const { username, email, password, balance } = data
+        const { _id, username, email, password, balance } = data
         ctx.user.details = {
+          _id,
           username,
           email,
           password,
@@ -66,7 +69,7 @@ export const Signup = () => {
                   setIsSubmitted( false )
                 }}>Create Another Account</button>
                 <button onClick={ () => {
-                  ctx.dispatch({ type: 'LOGIN_SUCCESS' })
+                  ctx.dispatch({ type: 'LOGIN_SUCCESS', data: ctx.user.details })
                 }} className='button__secondary'>Start Banking</button>
               </div>
             </>

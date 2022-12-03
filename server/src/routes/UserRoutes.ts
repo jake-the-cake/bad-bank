@@ -14,6 +14,12 @@ router.delete( '/deleteall', async ( req, res ) => {
   res.send( 'gone?' )
 })
 
+router.post( '/transactions', async ( req, res ) => {
+  const { id } = req.body
+  const account = await UserModel.find().where({ _id: id })
+  res.status( 200 ).json( account[ 0 ]?.transactions ?? null )
+})
+
 router.post( '/add', ( req, res ) => {
   const { username, email, password } = req.body
   console.log( req.body )

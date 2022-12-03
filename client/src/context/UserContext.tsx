@@ -30,6 +30,7 @@ export interface PageContextProps {
 // page reducer
 export const userReducer = ( state: PageContextProps, action: any ) => {
   const newUrl = action.data?.url ?? state.url
+  console.log( action.data )
   switch ( action.type ) {
     case 'LOGOUT_SUCCESS':
       console.log( 'logout success' )
@@ -80,6 +81,10 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         details: state.details,
         errors: state.errors,
         url: newUrl
+      }
+    case 'UPDATE_USER':
+      return {
+
       }
     default:
       console.log( 'default action: userReducer' )
