@@ -8,6 +8,12 @@ router.get( '/viewall', async ( req, res ) => {
   res.status( 200 ).json( users )
 })
 
+router.delete( '/deleteall', async ( req, res ) => {
+  const accounts = Array.from( await UserModel.find() )
+  accounts.forEach( acct => acct.delete() )
+  res.send( 'gone?' )
+})
+
 router.post( '/add', ( req, res ) => {
   const { username, email, password } = req.body
   console.log( req.body )

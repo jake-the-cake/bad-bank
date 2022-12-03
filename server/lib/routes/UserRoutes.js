@@ -21,6 +21,11 @@ router.get('/viewall', (req, res) => __awaiter(void 0, void 0, void 0, function*
     const users = yield UserModel_1.UserModel.find();
     res.status(200).json(users);
 }));
+router.delete('/deleteall', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const accounts = Array.from(yield UserModel_1.UserModel.find());
+    accounts.forEach(acct => acct.delete());
+    res.send('gone?');
+}));
 router.post('/add', (req, res) => {
     const { username, email, password } = req.body;
     console.log(req.body);

@@ -22,6 +22,11 @@ router.get('/viewall', (req, res) => __awaiter(void 0, void 0, void 0, function*
     const transactions = yield TransactionModel_1.TransactionModel.find();
     res.status(200).json(transactions);
 }));
+router.delete('/deleteall', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const accounts = Array.from(yield TransactionModel_1.TransactionModel.find());
+    accounts.forEach(acct => acct.delete());
+    res.send('gone?');
+}));
 router.post('/deposit', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const { id, amount } = req.body;
@@ -51,6 +56,92 @@ router.post('/deposit', (req, res) => __awaiter(void 0, void 0, void 0, function
             balance: toAccount.balance += amount
         });
         toAccount === null || toAccount === void 0 ? void 0 : toAccount.save();
+        resObj.statusCode = 201;
+    }
+    catch (err) {
+        resObj.error = {
+            type: 'SysErr',
+            message: 'Server error occurred.'
+        };
+        console.error(err);
+    }
+    res.status(resObj.statusCode).json(resObj);
+}));
+router.post('/withdraw', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
+    const { id, amount } = req.body;
+    const resObj = { statusCode: 500 };
+    try {
+        const toAccount = yield UserModel_1.UserModel.findOne({ _id: id });
+        const newTransaction = new TransactionModel_1.TransactionModel({
+            from: {
+                "type": 'real',
+                id,
+                "name": (_c = toAccount === null || toAccount === void 0 ? void 0 : toAccount.username) !== null && _c !== void 0 ? _c : 'My B.A.D. Account',
+                "balance": (_d = toAccount === null || toAccount === void 0 ? void 0 : toAccount.balance) !== null && _d !== void 0 ? _d : -1000000
+            },
+            to: {
+                type: 'cash',
+                id: 'cash',
+                name: 'Internet Cash Account',
+                balance: 1000000000
+            },
+            amount,
+            type: 'withdrawal'
+        });
+        resObj.data = newTransaction;
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.push(resObj.data);
+        newTransaction.save();
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.update({
+            balance: toAccount.balance -= amount
+        });
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.save();
+        resObj.statusCode = 201;
+    }
+    catch (err) {
+        resObj.error = {
+            type: 'SysErr',
+            message: 'Server error occurred.'
+        };
+        console.error(err);
+    }
+    res.status(resObj.statusCode).json(resObj);
+}));
+router.post('/transfer', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f, _g;
+    const { idTo, idFrom, amount } = req.body;
+    const resObj = { statusCode: 500 };
+    try {
+        const toAccount = yield UserModel_1.UserModel.findOne({ _id: idTo });
+        const fromAccount = yield UserModel_1.UserModel.findOne({ _id: idFrom });
+        const newTransaction = new TransactionModel_1.TransactionModel({
+            from: {
+                "type": 'real',
+                "id": idFrom,
+                "name": (_e = fromAccount === null || fromAccount === void 0 ? void 0 : fromAccount.username) !== null && _e !== void 0 ? _e : 'My B.A.D. Account',
+                "balance": (_f = fromAccount === null || fromAccount === void 0 ? void 0 : fromAccount.balance) !== null && _f !== void 0 ? _f : -1000000
+            },
+            to: {
+                type: 'real',
+                id: idTo,
+                name: toAccount === null || toAccount === void 0 ? void 0 : toAccount.username,
+                balance: (_g = toAccount === null || toAccount === void 0 ? void 0 : toAccount.balance) !== null && _g !== void 0 ? _g : -1000000
+            },
+            amount,
+            type: 'transfer'
+        });
+        resObj.data = newTransaction;
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.transactions.push(resObj.data);
+        fromAccount === null || fromAccount === void 0 ? void 0 : fromAccount.transactions.push(resObj.data);
+        newTransaction.save();
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.update({
+            balance: toAccount.balance += amount
+        });
+        fromAccount === null || fromAccount === void 0 ? void 0 : fromAccount.update({
+            balance: fromAccount.balance -= amount
+        });
+        toAccount === null || toAccount === void 0 ? void 0 : toAccount.save();
+        fromAccount === null || fromAccount === void 0 ? void 0 : fromAccount.save();
         resObj.statusCode = 201;
     }
     catch (err) {
