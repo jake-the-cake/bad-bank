@@ -32,8 +32,8 @@ export const Deposit = () => {
           }]}
           toAccount={[{   
             type: 'real',
-            id: ctx.user.details._id || '1234',
-            name: ctx.user.details.username || 'My B.A.D. Account',
+            id: ctx.user.details.id || '1234',
+            name: ctx.user.details.name || 'My B.A.D. Account',
             balance: ctx.user.details.balance || -1000000
           }]}
         />

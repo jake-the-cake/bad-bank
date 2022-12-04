@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const TransactionModel_1 = require("../models/TransactionModel");
 const UserModel_1 = require("../models/UserModel");
 const router = express_1.default.Router();
 exports.UserRouter = router;
@@ -27,10 +28,10 @@ router.delete('/deleteall', (req, res) => __awaiter(void 0, void 0, void 0, func
     res.send('gone?');
 }));
 router.post('/transactions', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
     const { id } = req.body;
-    const account = yield UserModel_1.UserModel.find().where({ _id: id });
-    res.status(200).json((_b = (_a = account[0]) === null || _a === void 0 ? void 0 : _a.transactions) !== null && _b !== void 0 ? _b : null);
+    const transactions = yield TransactionModel_1.TransactionModel.find();
+    const userTransactions = transactions.filter(t => t.to.id === id || t.from.id === id);
+    res.status(200).json(userTransactions !== null && userTransactions !== void 0 ? userTransactions : null);
 }));
 router.post('/add', (req, res) => {
     const { username, email, password } = req.body;
@@ -44,3 +45,8 @@ router.post('/add', (req, res) => {
     newUser.save();
     res.status(201).json(newUser);
 });
+router.post('/one', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id } = req.body;
+    const user = yield UserModel_1.UserModel.findOne({ _id });
+    res.status(200).json(user);
+}));

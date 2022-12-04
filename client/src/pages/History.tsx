@@ -26,7 +26,7 @@ export const History = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        'id': ctx.user.details._id
+        'id': ctx.user.details.id
       })
     })
     .then( res => res.json() )
@@ -38,6 +38,17 @@ export const History = () => {
       title='Transaction History'
       content={
         <div className='history__container'>
+          <div className='history__row'>
+            <div className='history__date'>
+              { new Date( ctx.user.details.createdAt ).toLocaleDateString() }
+            </div>
+            <div className='history__text'>
+              Account opened.
+            </div>
+            <div className='history__balance'>
+              $ 0.00
+            </div>
+          </div>
           {
             transactions ?
             transactions.map(( h: any, i: number ) => {
@@ -57,8 +68,9 @@ export const History = () => {
                   text = `$${ h.amount.toFixed( 2 ) } withdrawal made.`
                   break
                 case 'transfer':
-                  if ( ctx.user.details.username === h.to.name ) {
-                    newBal = h.amount + h.to.balance
+                  // console.log(ctx.user.)
+                  if ( ctx.user.details.name === h.to.name ) {
+                    newBal = h.to.balance + h.amount
                     text = `$${ h.amount.toFixed( 2 ) } transfer from ${ h.from.name.toUpperCase() }.`
                   }
                   else {
@@ -84,7 +96,18 @@ export const History = () => {
                 </div>
               )
             }) : <>No data.</>
-          } 
+          }
+          <div className='history__row--head'>
+            <div>
+              Date
+            </div>
+            <div>
+              Description
+            </div>
+            <div>
+              Balance
+            </div>
+          </div>
         </div>
       }
     />

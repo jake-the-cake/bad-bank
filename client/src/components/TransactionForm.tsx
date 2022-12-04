@@ -18,10 +18,6 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
 
-  // const [ selectedFrom, setSelectedFrom ] = useState( '' )
-
-  // console.log( fromAccount )
-
   const formObject: any = {}
 
   const returnTransterType = () => {
@@ -47,8 +43,21 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
       })
       .then( res => res.json() )
       .then( data => {
-        console.log( data )
-        ctx.user.details.recentHistory.push( data.data )
+        fetch( 'http://localhost:4200/users/one', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "_id": ctx.user.details.id
+          })
+        })
+        .then( res => res.json() )
+        .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
+        .catch( err => console.error( err.message ))
+
+        navigate( '/' )
       })
       .catch( err => console.error( err.message ))
     }
@@ -78,7 +87,21 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
           })
           .then( res => res.json() )
           .then( data => {
-            ctx.user.details.recentHistory.push( data.data )
+            fetch( 'http://localhost:4200/users/one', {
+              method: 'POST',
+              mode: 'cors',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                "_id": ctx.user.details.id
+              })
+            })
+            .then( res => res.json() )
+            .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
+            .catch( err => console.error( err.message ))
+
+            navigate( '/' )
           })
           .catch( err => console.error( err.message ))
         }
@@ -104,8 +127,21 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
           })
           .then( res => res.json() )
           .then( data => {
-            console.log( data )
-            ctx.user.details.recentHistory.push( data.data )
+            fetch( 'http://localhost:4200/users/one', {
+              method: 'POST',
+              mode: 'cors',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                "_id": ctx.user.details.id
+              })
+            })
+            .then( res => res.json() )
+            .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
+            .catch( err => console.error( err.message ))
+            
+            navigate( '/' )
           })
           .catch( err => console.error( err.message ))
         }
@@ -117,11 +153,12 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
   else {
     returnTransterType()
   }
+
   if ( !formObject.balance ) formObject.balance = fromAccount[ 0 ]?.balance ?? '0'
 
   const Option = ({ id, name }) => {
     return (
-      <option key={ id } value={ id }>{ `xx${ id.split( '' ).filter( char => char.match(/[0-9]/) ).join( '' ).slice( 5, 9 ) || 1234 } >> '${ name.toUpperCase() }'` }</option>
+      <option key={ id } value={ id }>{ `xx${ id.split( '' ).filter( char => char.match(/[0-9]/) ).join( '' ).slice( 5, 9 )} >> '${ name.toUpperCase() }'` }</option>
     )
   }
 

@@ -8,11 +8,10 @@ export type TransactionDetails = {
 }
 
 export type UserDetails = {
+  id: string
   name: string
-  email: string
-  password: string
   balance: number
-  recentHistory: TransactionDetails[]
+  transactions: TransactionDetails[]
 }
 
 export type ErrorDetails = {
@@ -27,10 +26,18 @@ export interface PageContextProps {
   url?: string | undefined
 }
 
+const updateUser = ( data: any ) => {
+  return {
+    id: data._id,
+    name: data.username,
+    balance: data.balance,
+    transactions: data.transactions?.slice( 0, 5 ) ?? []
+  }
+}
+
 // page reducer
 export const userReducer = ( state: PageContextProps, action: any ) => {
   const newUrl = action.data?.url ?? state.url
-  console.log( action.data )
   switch ( action.type ) {
     case 'LOGOUT_SUCCESS':
       console.log( 'logout success' )
@@ -42,13 +49,9 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
       }
     case 'LOGIN_SUCCESS':
       console.log( 'login success' )
-      console.log( action.data )
       return {
         loginState: true,
-        details: {
-          ...action.data,
-          recentHistory: []
-        },
+        details: updateUser( action.data ),
         errors: undefined,
         url: state.url
       }
@@ -83,8 +86,12 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         url: newUrl
       }
     case 'UPDATE_USER':
+      console.log( `updated user ${ state.details?.name }` )
       return {
-
+        loginState: state.loginState,
+        details: updateUser( action.data ),
+        errors: undefined,
+        url: state.url
       }
     default:
       console.log( 'default action: userReducer' )

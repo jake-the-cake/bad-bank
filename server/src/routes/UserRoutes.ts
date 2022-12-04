@@ -1,4 +1,5 @@
 import Express from 'express'
+import { TransactionModel } from '../models/TransactionModel'
 import { UserModel } from '../models/UserModel'
 
 const router = Express.Router()
@@ -16,8 +17,9 @@ router.delete( '/deleteall', async ( req, res ) => {
 
 router.post( '/transactions', async ( req, res ) => {
   const { id } = req.body
-  const account = await UserModel.find().where({ _id: id })
-  res.status( 200 ).json( account[ 0 ]?.transactions ?? null )
+  const transactions = await TransactionModel.find()
+  const userTransactions = transactions.filter( t => t.to.id === id || t.from.id === id )
+  res.status( 200 ).json( userTransactions ?? null )
 })
 
 router.post( '/add', ( req, res ) => {
@@ -31,6 +33,12 @@ router.post( '/add', ( req, res ) => {
   })
   newUser.save()
   res.status( 201 ).json( newUser )
+})
+
+router.post( '/one', async ( req, res ) => {
+  const { _id } = req.body
+  const user = await UserModel.findOne({ _id })
+  res.status( 200 ).json( user )
 })
 
 export { router as UserRouter }

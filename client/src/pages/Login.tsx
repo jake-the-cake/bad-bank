@@ -33,7 +33,6 @@ export const Login = () => {
       })
       .then( res => res.json() )
       .then( data => {
-        console.log( data.statusCode )
         ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })        
       })
       .catch( err => console.error( err.message ))
