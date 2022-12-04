@@ -242,6 +242,7 @@ a {
   font-weight: 100;
   font-style: italic;
   border-radius: 9999px;
+  font-size: .8rem;
   width: 15%;
   text-align: center;
 }

@@ -22,17 +22,82 @@ router.post( '/transactions', async ( req, res ) => {
   res.status( 200 ).json( userTransactions ?? null )
 })
 
-router.post( '/add', ( req, res ) => {
+router.post( '/add', async ( req, res ) => {
   const { username, email, password } = req.body
-  console.log( req.body )
-  const newUser = new UserModel({
-    username,
-    email,
-    password,
-    balance: 0
-  })
-  newUser.save()
-  res.status( 201 ).json( newUser )
+  const resObj: any = { statusCode: 500, errors: undefined, data: undefined }
+
+  console.log( username )
+
+  // validate username
+  if ( username === '' ) {
+    resObj.errors= { ...resObj.errors, username: {
+      type: 'Required',
+      message: 'Username is required.'
+    }}
+    resObj.statusCode = 403
+  }
+  else if ( Array.from( await UserModel.find({ username })).length > 0 ) {
+    resObj.errors = { ...resObj.errors, username: {
+      type: 'Taken',
+      message: 'This username has been taken.'
+    }}
+    resObj.statusCode = 403
+  }
+
+  // validate username
+  if ( email === '' ) {
+    resObj.errors = { ...resObj.errors, email: {
+      type: 'Required',
+      message: 'Email is required.'
+    }}
+    resObj.statusCode = 403
+  }
+  else if ( Array.from( await UserModel.find({ email })).length > 0 ) {
+    resObj.errors = { ...resObj.errors, email: {
+      type: 'Taken',
+      message: 'This email has been taken.'
+    }}
+    resObj.statusCode = 403
+  }
+
+  // validate password
+  if ( password === '' ) {
+    resObj.errors = { ...resObj.errors, password: {
+      type: 'Required',
+      message: 'Password is required.'
+    }}
+    resObj.statusCode = 403
+  }
+  else if ( password.length < 6 ) {
+    resObj.errors = { ...resObj.errors, password: {
+      type: 'PassErr',
+      message: 'Must be at least 6 characters.'
+    }}
+    resObj.statusCode = 403
+  }
+
+  // validate password
+  password
+  ? null
+  : null
+
+  if ( resObj.errors === undefined ) {
+    const data = new UserModel({
+      username,
+      email,
+      password,
+      balance: 0,
+      transactions: []
+    })
+    data.save()
+    resObj.data = data
+    resObj.statusCode = 201
+  }
+  
+  console.log( resObj.errors )
+  console.log( resObj.data )
+
+  res.status( resObj.statusCode ).json( resObj )
 })
 
 router.post( '/one', async ( req, res ) => {
