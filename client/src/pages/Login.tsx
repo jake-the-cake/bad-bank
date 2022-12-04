@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { PageContext } from '../context/UserContext'
 import { changeActiveLink } from '../functions/changeActiveLink'
+import { UseFetch } from '../hooks/UseFetch'
 
 export const Login = () => {
   const ctx = useContext( PageContext )
@@ -20,20 +21,29 @@ export const Login = () => {
       event.preventDefault()
       const email = document.getElementById( 'email' ) as HTMLInputElement
       const password = document.getElementById( 'password' ) as HTMLInputElement
-      fetch( 'http://localhost:4200/auth/login', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "email": email.value,
-          "password": password.value
-        })
+      UseFetch( 'POST', '/auth/login', {
+        body: {
+          'email': email.value,
+          'password': password.value
+        }
       })
       .then( res => res.json() )
       .then( data => {
-        ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })        
+        console.log( data.error )
+        switch ( data.statusCode ) {
+          case 201:
+            ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })    
+            break
+          case 403:
+            ctx.dispatch({ type: 'LOGIN_404' })
+            break
+          case 401:
+            ctx.dispatch({ type: 'LOGIN_DENIED' })
+            break
+          default:
+            console.log( 'unknown statusCode' )
+            break
+        }    
       })
       .catch( err => console.error( err.message ))
     }

@@ -68,7 +68,6 @@ export const History = () => {
                   text = `$${ h.amount.toFixed( 2 ) } withdrawal made.`
                   break
                 case 'transfer':
-                  // console.log(ctx.user.)
                   if ( ctx.user.details.name === h.to.name ) {
                     newBal = h.to.balance + h.amount
                     text = `$${ h.amount.toFixed( 2 ) } transfer from ${ h.from.name.toUpperCase() }.`
