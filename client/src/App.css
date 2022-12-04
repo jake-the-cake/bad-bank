@@ -160,7 +160,15 @@ a {
   gap: 1rem;
   align-items: center;
   width: fit-content;
-  margin: auto;
+  margin: 2rem auto auto;
+}
+
+.form__error {
+  color: #ad3737;
+  font-weight: 900;
+  margin-bottom: -1rem;
+  font-size: .8rem;
+  letter-spacing: 1px;
 }
 
 .form__container label {

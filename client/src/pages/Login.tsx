@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { PageContext } from '../context/UserContext'
@@ -14,39 +14,45 @@ export const Login = () => {
     ctx.user.url,
     ctx.dispatch
   )
-
+  
   if ( ctx.user.loginState === true ) navigate( '/dashboard' )
 
-    const handleLogin = ( event: any ) => {
-      event.preventDefault()
-      const email = document.getElementById( 'email' ) as HTMLInputElement
-      const password = document.getElementById( 'password' ) as HTMLInputElement
-      UseFetch( 'POST', '/auth/login', {
-        body: {
-          'email': email.value,
-          'password': password.value
-        }
-      })
-      .then( res => res.json() )
-      .then( data => {
-        console.log( data.error )
-        switch ( data.statusCode ) {
-          case 201:
-            ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })    
-            break
-          case 403:
-            ctx.dispatch({ type: 'LOGIN_404' })
-            break
-          case 401:
-            ctx.dispatch({ type: 'LOGIN_DENIED' })
-            break
-          default:
-            console.log( 'unknown statusCode' )
-            break
-        }    
-      })
-      .catch( err => console.error( err.message ))
-    }
+  const [ errorMessage, setErrorMessage ] = useState( '' )
+
+  /* 
+    ::: LOGIN FUNCTION
+  */
+  const handleLogin = ( event: any ) => {
+    event.preventDefault()
+
+    // put input values into variables
+    const email = ( document.getElementById( 'email' ) as HTMLInputElement ).value
+    const password = ( document.getElementById( 'password' ) as HTMLInputElement ).value
+
+    // make call to database
+    UseFetch( 'POST', '/auth/login', { body: { email, password }})
+    .then( res => res.json() )
+    .then( data => {
+      // set error message
+      data.error ? setErrorMessage( data.error.message ) : null
+      // change login state based on statusCode response
+      switch ( data.statusCode ) {
+        case 201:
+          ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })    
+          break
+        case 403:
+          ctx.dispatch({ type: 'LOGIN_404' })
+          break
+        case 401:
+          ctx.dispatch({ type: 'LOGIN_DENIED' })
+          break
+        default:
+          console.log( 'unknown statusCode' )
+          break
+      }    
+    })
+    .catch( err => console.error( err.message ))
+  }
 
   return (
     <MainCard
@@ -58,6 +64,11 @@ export const Login = () => {
           <input id='email' placeholder='Enter your email address' type="text" />
           <label htmlFor='password'>Password</label>
           <input id='password' placeholder='Enter your password' type="text" />
+          {
+            !errorMessage ? null : (
+              <div className='form__error'>{ errorMessage }</div>
+            )
+          }
           <div className='buttons__horizontal'>
             <button onClick={ handleLogin }>Login</button>
             <button onClick={ () => navigate( '/signup' )} className='button__secondary'>Create Account Instead</button>
