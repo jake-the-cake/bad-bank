@@ -38,6 +38,7 @@ const updateUser = ( data: any ) => {
 // page reducer
 export const userReducer = ( state: PageContextProps, action: any ) => {
   const newUrl = action.data?.url ?? state.url
+  console.log( action.data )
   switch ( action.type ) {
     case 'LOGOUT_SUCCESS':
       console.log( 'logout success' )

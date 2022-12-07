@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { PageContext } from '../context/UserContext'
+import { UseFetch } from '../hooks/UseFetch'
 
 type AccountDetails = {
   type: string
@@ -17,6 +18,17 @@ interface TransactionFormProps {
 export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = ({ fromAccount, toAccount }) => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
+
+  const [ errorMessage, setErrorMessage ] = useState( 'err' )
+
+  const handleAmountChange = ( event: Event ) => {
+    event.preventDefault()
+    const value = ( event.target as HTMLInputElement ).value
+    const splitValue = value.split( '' )
+    if ( splitValue.length === 0 ) ( event.target as HTMLInputElement ).value = '0'
+    if ( Number( value ) < 0 ) setErrorMessage( 'Negative numbers not allowed.' )
+    console.log( splitValue )
+  }
 
   const formObject: any = {}
 
@@ -114,16 +126,11 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
           const fromId: string = ( document.getElementById( 'from' ) as HTMLSelectElement ).value
           const amt: string = ( document.getElementById( 'amount' ) as HTMLInputElement ).value
           event.preventDefault()
-          fetch( 'http://localhost:4200/transaction/withdraw', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+          UseFetch( 'POST', '/transaction/withdraw', {
+            body: {
               "id": fromId,
               "amount": Number( amt )
-            })
+            }
           })
           .then( res => res.json() )
           .then( data => {
@@ -187,7 +194,12 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
       }
       </select>
       <label htmlFor='amount'>{ formObject.type } Amount</label>
-      <input id='amount' placeholder='Amount' type="text" />
+      <input id='amount' onChange={ handleAmountChange } placeholder='Amount' type="text" />
+      {
+        !errorMessage ? null : (
+          <div className='form__error'>{ errorMessage }</div>
+        )
+      }
       <div className='buttons__horizontal'>
         <button onClick={ formObject.onClick }>Make { formObject.type }</button>
         <button className='button__secondary' onClick={ () => navigate( '/' ) }>Back</button>

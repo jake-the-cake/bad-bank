@@ -82,10 +82,6 @@ router.post('/add', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             } });
         resObj.statusCode = 403;
     }
-    // validate password
-    password
-        ? null
-        : null;
     if (resObj.errors === undefined) {
         const data = new UserModel_1.UserModel({
             username,

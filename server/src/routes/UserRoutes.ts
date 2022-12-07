@@ -76,11 +76,6 @@ router.post( '/add', async ( req, res ) => {
     resObj.statusCode = 403
   }
 
-  // validate password
-  password
-  ? null
-  : null
-
   if ( resObj.errors === undefined ) {
     const data = new UserModel({
       username,

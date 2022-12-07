@@ -100,7 +100,6 @@ router.post( '/withdraw', async ( req, res ) => {
     }
     console.error( err )
   }
-
   res.status( resObj.statusCode ).json( resObj )
 })
 
