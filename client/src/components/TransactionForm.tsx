@@ -21,12 +21,21 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
 
   const [ errorMessage, setErrorMessage ] = useState( 'err' )
 
-  const handleAmountChange = ( event: Event ) => {
+  const handleAmountChange = ( event: any ) => {
     event.preventDefault()
     const value = ( event.target as HTMLInputElement ).value
     const splitValue = value.split( '' )
+    let isInvalid = false
+
+    if ( splitValue[ 0 ] === '0' ) {
+      // splitValue.shift()
+      ( event.target as HTMLInputElement ).value = ( event.target as HTMLInputElement ).value.slice( 1 )
+    }
+
     if ( splitValue.length === 0 ) ( event.target as HTMLInputElement ).value = '0'
-    if ( Number( value ) < 0 ) setErrorMessage( 'Negative numbers not allowed.' )
+    else if ( Number( value ) < 0 ) setErrorMessage( 'Negative numbers not allowed.' )
+    else if ( 0 * Number( value ) !== 0 ) setErrorMessage( 'Only numbers allowed.' )
+    else setErrorMessage( '' )
     console.log( splitValue )
   }
 
