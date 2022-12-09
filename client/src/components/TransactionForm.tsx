@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { PageContext } from '../context/UserContext'
 import { UseFetch } from '../hooks/UseFetch'
@@ -19,32 +19,49 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
 
-  const [ errorMessage, setErrorMessage ] = useState( 'err' )
+  const [ errorMessage, setErrorMessage ] = useState( '' )
 
   const handleAmountChange = ( event: any ) => {
     event.preventDefault()
     const value = ( event.target as HTMLInputElement ).value
     const splitValue = value.split( '' )
-    let isInvalid = false
-
     if ( splitValue[ 0 ] === '0' ) {
-      // splitValue.shift()
-      ( event.target as HTMLInputElement ).value = ( event.target as HTMLInputElement ).value.slice( 1 )
+      ( event.target as HTMLInputElement ).value = value.slice( 1 )
     }
-
-    if ( splitValue.length === 0 ) ( event.target as HTMLInputElement ).value = '0'
+    if ( splitValue.length === 0 ) {
+      ( event.target as HTMLInputElement ).value = '0'
+      setErrorMessage( '' )
+    }
     else if ( Number( value ) < 0 ) setErrorMessage( 'Negative numbers not allowed.' )
     else if ( 0 * Number( value ) !== 0 ) setErrorMessage( 'Only numbers allowed.' )
     else setErrorMessage( '' )
-    console.log( splitValue )
+  }
+
+  const handleAccountChange = ( event: any ) => {
+    event.preventDefault()
+    const changedInput = ( event.target as HTMLSelectElement )
+    let inputName = 'to'
+    switch ( changedInput.id ) {
+      case 'to':
+        inputName = 'from'
+        break
+        default:
+        break
+    }
+    if ( changedInput.value !== ctx.user.details.id ) {
+      ( document.getElementById( inputName ) as HTMLSelectElement ).value = ctx.user.details.id
+    }
   }
 
   const formObject: any = {}
 
   const returnTransterType = () => {
+    setTimeout(() => {
+      ( document.getElementById( 'from' ) as HTMLSelectElement ).value = ctx.user.details.id
+    }, 100 )
     formObject.type = 'Transfer'
     formObject.fromDisabled = false
-    formObject.toDisabled = false
+    formObject.toDisabled = false   
     formObject.onClick = ( event: Event ) => {
       const fromId: string = ( document.getElementById( 'from' ) as HTMLSelectElement ).value
       const toId: string = ( document.getElementById( 'to' ) as HTMLSelectElement ).value
@@ -181,7 +198,7 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
   return (
     <form className='form__container'>
       <label htmlFor='from'>From account</label>
-      <select id='from' disabled={ formObject.fromDisabled }>
+      <select onChange={ handleAccountChange } id='from' disabled={ formObject.fromDisabled }>
       {
         fromAccount.map( acct => (
               <Option
@@ -192,7 +209,7 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
           }
       </select>
       <label htmlFor='to'>To account</label>
-      <select id='to' disabled={ formObject.toDisabled }>
+      <select onChange={ handleAccountChange } id='to' disabled={ formObject.toDisabled }>
       {
         toAccount.map( acct => (
           <Option
