@@ -160,16 +160,19 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
           })
           .then( res => res.json() )
           .then( data => {
-            fetch( 'http://localhost:4200/users/one', {
-              method: 'POST',
-              mode: 'cors',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                "_id": ctx.user.details.id
-              })
+            UseFetch( 'POST', '/users/one', {
+              body: { "_id": ctx.user.details.id }
             })
+            // fetch( 'http://localhost:4200/users/one', {
+            //   method: 'POST',
+            //   mode: 'cors',
+            //   headers: {
+            //     'Content-Type': 'application/json'
+            //   },
+            //   body: JSON.stringify({
+            //     "_id": ctx.user.details.id
+            //   })
+            // })
             .then( res => res.json() )
             .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
             .catch( err => console.error( err.message ))
