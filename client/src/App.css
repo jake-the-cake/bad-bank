@@ -272,6 +272,7 @@ a {
   position: relative;
   border-radius: .5rem;
   overflow: hidden;
+  max-width: 20%;
 }
 
 .side__container--left {

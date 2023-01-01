@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PageContext } from '../context/UserContext'
 import { Login404Button, LoginDeniedButton, LoginToggleButton } from '../dev/LoginToggle'
 
@@ -64,11 +64,47 @@ const LeftSide = () => {
 }
 
 const RightSide = () => {
+  const ctx = useContext( PageContext )
+  const [ conversionRate, setConversionRate ] = useState( 1.99 )
+  const [ isLoading, setisLoading ] = useState( false )
+
+  const posNeg = () => {
+    const switchVar = Math.floor( Math.random() * 2 )
+    switch ( switchVar ) {
+      case 0:
+        return -1
+      default:
+        return 1
+    }
+  }
+  useEffect(() => {
+    if ( !isLoading ) {
+      setInterval(() => {
+        setisLoading( true )
+        const rateChange = ( Math.random() * .00869 ).toFixed( 4 )
+        setConversionRate( conversionRate + ( Number( rateChange ) * posNeg() ))
+        setisLoading( false )
+      }, 3000)
+    }
+  }, [] )
+
   return (
     <>
-      {/* <LoginToggleButton /><br />
-      <Login404Button /><br />
-      <LoginDeniedButton /> */}
+      {
+        !ctx.user.loginState ? null : (
+          <>
+            <div className='side__card'>
+              <div className='side__card--transactions' style={{ textAlign: 'center' }}>
+                <span>We provide a live update on your <span style={{ fontStyle: 'italic' }}>Dollars To Donuts</span> balance. </span>
+              </div>
+            </div>
+            <div className='side__card'>
+              <div className='side__card--title'>Donuts</div>
+              <div className='side__card--balance'>{( ctx.user.details.balance * conversionRate).toFixed( 3 )}</div>
+            </div>
+          </>
+        )
+      }
     </>
   )
 }
