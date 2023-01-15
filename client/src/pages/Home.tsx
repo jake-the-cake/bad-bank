@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { PageContext } from '../context/UserContext'
@@ -8,13 +8,17 @@ export const Home = () => {
   const navigate = useNavigate()
   const ctx = useContext( PageContext )
   
-  changeActiveLink(
-    window.location.pathname,
-    ctx.user.url,
-    ctx.dispatch
-  )
-
-  if ( ctx.user.loginState === true ) navigate( '/dashboard' )  
+  useEffect(() => {
+    // update context with current url pathname
+    changeActiveLink(
+      window.location.pathname,
+      ctx.user.url,
+      ctx.dispatch
+    )
+  
+    // redirect to login if not logged in
+    if ( ctx.user.loginState === true ) navigate( '/dashboard' )  
+  }, [])
   
   const handleButton = ( event: any ) => {
     event.preventDefault()

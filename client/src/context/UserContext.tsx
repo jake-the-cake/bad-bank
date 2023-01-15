@@ -38,10 +38,10 @@ const updateUser = ( data: any ) => {
 // page reducer
 export const userReducer = ( state: PageContextProps, action: any ) => {
   const newUrl = action.data?.url ?? state.url
-  console.log( action.data )
+  // console.log( action.data )
   switch ( action.type ) {
     case 'LOGOUT_SUCCESS':
-      console.log( 'logout success' )
+      // console.log( 'logout success' )
       return {
         loginState: false,
         details: undefined,
@@ -49,7 +49,7 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         url: state.url
       }
     case 'LOGIN_SUCCESS':
-      console.log( 'login success' )
+      // console.log( 'login success' )
       return {
         loginState: true,
         details: updateUser( action.data ),
@@ -57,7 +57,7 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         url: state.url
       }
     case 'LOGIN_404':
-      console.log( 'login not found' )
+      // console.log( 'login not found' )
       return {
         loginState: false,
         details: undefined,
@@ -68,7 +68,7 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         url: state.url
       }
     case 'LOGIN_DENIED':
-      console.log( 'wrong password' )
+      // console.log( 'wrong password' )
       return {
         loginState: false,
         details: undefined,
@@ -79,7 +79,7 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         url: state.url
       }
     case 'CHANGE_PAGE':
-      console.log( `navigated to ${ newUrl }` )
+      // console.log( `navigated to ${ newUrl }` )
       return {
         loginState: state.loginState,
         details: state.details,
@@ -87,7 +87,7 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         url: newUrl
       }
     case 'UPDATE_USER':
-      console.log( `updated user ${ state.details?.name }` )
+      // console.log( `updated user ${ state.details?.name }` )
       return {
         loginState: state.loginState,
         details: updateUser( action.data ),
@@ -95,7 +95,7 @@ export const userReducer = ( state: PageContextProps, action: any ) => {
         url: state.url
       }
     default:
-      console.log( 'default action: userReducer' )
+      // console.log( 'default action: userReducer' )
       return {
         loginState: false,
         details: undefined,

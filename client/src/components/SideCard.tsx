@@ -6,6 +6,19 @@ interface SideCardProps {
   side: string
 }
 
+const TransactionChart = ({ displayObj }: { displayObj: any }) => {
+  return (
+    <>
+      <div key={ displayObj.key }>
+        { displayObj.type }
+      </div>
+      <div key={ displayObj.key + 'b' } className={ displayObj.className }>
+        $ { displayObj.amount.toFixed( 2 ) }
+      </div>
+    </>
+  )
+}
+
 const LeftSide = () => {
   const ctx = useContext( PageContext )
   return (
@@ -23,10 +36,11 @@ const LeftSide = () => {
             </div>            
             <div className='side__card'>
               <div className='side__card--title'>Recent Transactions</div>
-              <div className='side__card--transactions'>{ ctx.user.details.transactions?.map( tran => {
+              <div className='side__card--transactions'>{ ctx.user.details.transactions?.map((tran: any, i: number )=> {
                 const displayObj: any = {
                   type: tran.type[ 0 ].toUpperCase() + tran.type.slice( 1 ),
                   amount: tran.amount,
+                  key: `tally${ i }`,
                   className: 'side__balance--text'
                 }
                 switch ( tran.type ) {
@@ -45,14 +59,10 @@ const LeftSide = () => {
                 }
 
                 return (
-                  <>
-                    <div>
-                      { displayObj.type }
-                    </div>
-                    <div className={ displayObj.className }>
-                      $ { displayObj.amount.toFixed( 2 ) }
-                    </div>
-                  </>
+                  <TransactionChart
+                    key={ displayObj.key }
+                    displayObj= { displayObj }
+                  />
                 )
               }) ?? null }</div>
             </div>

@@ -338,3 +338,10 @@ a {
 button:hover {
   opacity: .8;
 }
+
+button:disabled {
+  background-color: #373737 !important;
+  opacity: 1 !important;
+  color: var(--ltblue) !important;
+  cursor: not-allowed;
+}

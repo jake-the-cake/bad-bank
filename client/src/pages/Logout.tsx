@@ -1,11 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { PageContext } from '../context/UserContext'
 
 export const Logout = () => {
   const ctx = useContext( PageContext )
-  if ( ctx.user.loginState === true ) ctx.dispatch({ type: 'LOGOUT_SUCCESS' })
-  useNavigate()( '/login' )
+  const navigate = useNavigate()
+  useEffect(() => {
+    navigate( '/login' )
+    if ( ctx.user.loginState === true ) ctx.dispatch({ type: 'LOGOUT_SUCCESS' })
+  }, [])
 
   // display message if there is an error
   return (

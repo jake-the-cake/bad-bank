@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react'
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { PageContext } from '../context/UserContext'
@@ -10,13 +10,14 @@ export const Signup = () => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
 
-  changeActiveLink(
-    window.location.pathname,
-    ctx.user.url,
-    ctx.dispatch
-  )
-
-  if ( ctx.user.loginState === true ) navigate( '/dashboard' )
+  useEffect(() => {
+    changeActiveLink(
+      window.location.pathname,
+      ctx.user.url,
+      ctx.dispatch
+    )
+    if ( ctx.user.loginState === true ) navigate( '/dashboard' )
+  }, [])
 
   const [ errorMessage, setErrorMessage ]: [ any, Dispatch<SetStateAction<any>>] = useState( null )
   const [ nextUser, setNextUser ]: [ any, Dispatch<SetStateAction<any>>] = useState( null )
@@ -34,7 +35,7 @@ export const Signup = () => {
       .then( res => res.json() )
       .then( ({ data, errors }) => {
         !data ? null : setNextUser({
-          id: data._id,
+          _id: data._id,
           username: data.username,
           balance: 0,
           transactions: []

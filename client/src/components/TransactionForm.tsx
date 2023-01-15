@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { PageContext } from '../context/UserContext'
 import { UseFetch } from '../hooks/UseFetch'
@@ -20,6 +20,12 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
   const navigate = useNavigate()
 
   const [ errorMessage, setErrorMessage ] = useState( '' )
+  const [ hasErrors, setHasErrors ] = useState( true )
+
+  useEffect(() => {
+    if ( errorMessage === '' ) setHasErrors( false )
+    else setHasErrors( true )
+  }, [ errorMessage ])
 
   const handleAmountChange = ( event: any ) => {
     event.preventDefault()
@@ -67,37 +73,30 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
       const toId: string = ( document.getElementById( 'to' ) as HTMLSelectElement ).value
       const amt: string = ( document.getElementById( 'amount' ) as HTMLInputElement ).value
       event.preventDefault()
-      fetch( 'http://localhost:4200/transaction/transfer', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "idFrom": fromId,
-          "idTo": toId,
-          "amount": Number( amt )
-        })
-      })
-      .then( res => res.json() )
-      .then( data => {
-        fetch( 'http://localhost:4200/users/one', {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            "_id": ctx.user.details.id
-          })
+      if (toId === fromId ) {
+        setErrorMessage( 'Cannot transfer to your own account.' )
+      }
+      else {
+        UseFetch( 'POST', '/transaction/transfer', {
+          body: {
+            idFrom: fromId,
+            idTo: toId,
+            amount: Number( amt )
+          }
         })
         .then( res => res.json() )
-        .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
+        .then( data => {
+          UseFetch( 'POST', '/users/one', {
+            body: { _id: ctx.user.details.id }
+          })
+          .then( res => res.json() )
+          .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
+          .catch( err => console.error( err.message ))
+  
+          navigate( '/' )
+        })
         .catch( err => console.error( err.message ))
-
-        navigate( '/' )
-      })
-      .catch( err => console.error( err.message ))
+      }
     }
   }
 
@@ -111,29 +110,18 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
           const toId: string = ( document.getElementById( 'to' ) as HTMLSelectElement ).value
           const amt: string = ( document.getElementById( 'amount' ) as HTMLInputElement ).value
           event.preventDefault()
-          console.log( formObject.type )
-          fetch( 'http://localhost:4200/transaction/deposit', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              "id": toId,
-              "amount": Number( amt )
-            })
+          UseFetch( 'POST', '/transaction/deposit', {
+            body: {
+              id: toId,
+              amount: Number( amt )
+            }
           })
           .then( res => res.json() )
           .then( data => {
-            fetch( 'http://localhost:4200/users/one', {
-              method: 'POST',
-              mode: 'cors',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                "_id": ctx.user.details.id
-              })
+            UseFetch( 'POST', '/users/one', {
+              body: {
+                _id: ctx.user.details.id
+              }
             })
             .then( res => res.json() )
             .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
@@ -163,16 +151,6 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
             UseFetch( 'POST', '/users/one', {
               body: { "_id": ctx.user.details.id }
             })
-            // fetch( 'http://localhost:4200/users/one', {
-            //   method: 'POST',
-            //   mode: 'cors',
-            //   headers: {
-            //     'Content-Type': 'application/json'
-            //   },
-            //   body: JSON.stringify({
-            //     "_id": ctx.user.details.id
-            //   })
-            // })
             .then( res => res.json() )
             .then( data => ctx.dispatch({ type: 'UPDATE_USER', data }))
             .catch( err => console.error( err.message ))
@@ -203,8 +181,9 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
       <label htmlFor='from'>From account</label>
       <select onChange={ handleAccountChange } id='from' disabled={ formObject.fromDisabled }>
       {
-        fromAccount.map( acct => (
+        fromAccount.map(( acct, i: number ) => (
               <Option
+                key={ `acct${ i }a` }
                 id={ acct.id }
                 name={ acct.name }
               />
@@ -214,8 +193,9 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
       <label htmlFor='to'>To account</label>
       <select onChange={ handleAccountChange } id='to' disabled={ formObject.toDisabled }>
       {
-        toAccount.map( acct => (
+        toAccount.map(( acct, i: number ) => (
           <Option
+            key={ `acct${ i }a` }
             id={ acct.id }
             name={ acct.name }
           />
@@ -230,7 +210,7 @@ export const TransactionForm: ( props: TransactionFormProps ) => JSX.Element = (
         )
       }
       <div className='buttons__horizontal'>
-        <button onClick={ formObject.onClick }>Make { formObject.type }</button>
+        <button disabled={ hasErrors } onClick={ formObject.onClick }>Make { formObject.type }</button>
         <button className='button__secondary' onClick={ () => navigate( '/' ) }>Back</button>
       </div>
     </form>

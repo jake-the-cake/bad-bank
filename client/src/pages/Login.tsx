@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { PageContext } from '../context/UserContext'
@@ -9,13 +9,15 @@ export const Login = () => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
 
-  changeActiveLink(
-    window.location.pathname,
-    ctx.user.url,
-    ctx.dispatch
-  )
-  
-  if ( ctx.user.loginState === true ) navigate( '/dashboard' )
+  useEffect(() => {
+    changeActiveLink(
+      window.location.pathname,
+      ctx.user.url,
+      ctx.dispatch
+    )
+    
+    if ( ctx.user.loginState === true ) navigate( '/dashboard' )
+  }, [])
 
   const [ errorMessage, setErrorMessage ] = useState( '' )
 
@@ -39,6 +41,7 @@ export const Login = () => {
       switch ( data.statusCode ) {
         case 201:
           ctx.dispatch({ type: 'LOGIN_SUCCESS', data: data.data })    
+          navigate( '/dashboard' )
           break
         case 403:
           ctx.dispatch({ type: 'LOGIN_404' })
@@ -63,7 +66,7 @@ export const Login = () => {
           <label htmlFor='email'>Email</label>
           <input id='email' placeholder='Enter your email address' type="text" />
           <label htmlFor='password'>Password</label>
-          <input id='password' placeholder='Enter your password' type="text" />
+          <input id='password' placeholder='Enter your password' type="password" />
           {
             !errorMessage ? null : (
               <div className='form__error'>{ errorMessage }</div>

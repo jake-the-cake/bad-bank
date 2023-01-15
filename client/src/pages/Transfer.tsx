@@ -4,28 +4,27 @@ import { MainCard } from '../components/MainCard'
 import { TransactionForm } from '../components/TransactionForm'
 import { PageContext } from '../context/UserContext'
 import { changeActiveLink } from '../functions/changeActiveLink'
+import { UseFetch } from '../hooks/UseFetch'
 
 export const Transfer = () => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
   const [ accounts, setAccounts ] = useState( [] )
   
-  changeActiveLink(
-    window.location.pathname,
-    ctx.user.url,
-    ctx.dispatch
-  )
-      
-  if ( ctx.user.loginState !== true ) navigate( '/login' )
+  useEffect(() => {
+    // update context with current url pathname
+    changeActiveLink(
+      window.location.pathname,
+      ctx.user.url,
+      ctx.dispatch
+    )
+  
+    // redirect to login if not logged in
+    if ( ctx.user.loginState !== true ) navigate( '/login' )  
+  }, [])
 
   useEffect(() => {
-    fetch( 'http://localhost:4200/users/viewall', {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
+    UseFetch( 'GET', '/users/viewall' )
     .then( res => res.json() )
     .then( data => {
       const arr: any = []
@@ -48,15 +47,7 @@ export const Transfer = () => {
       subtitle='Select the destination account from the dropdown below.'
       content={
         <TransactionForm
-          fromAccount={ 
-            /*[{
-              type: 'user',
-              id: 'user',
-              name: 'My B.A.D. Account',
-              balance: 50
-            }] */
-            accounts
-          }
+          fromAccount={ accounts }
           toAccount={ accounts }
         />
       }

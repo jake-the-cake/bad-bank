@@ -68,8 +68,9 @@ export const Navbar = () => {
       </Link>
       <div className='header__links--container'>
       {
-        (( ctx.user.loginState && ctx.user.url ) ? privateLinks : publicLinks ).map(( link: NavLinkProps ) => (
-          <NavLink 
+        (( ctx.user.loginState && ctx.user.url ) ? privateLinks : publicLinks ).map(( link: NavLinkProps, i: number ) => (
+          <NavLink
+            key={ `navlink${ i }` }
             url={ link.url }
             text={ link.text }
           />

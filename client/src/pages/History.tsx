@@ -1,33 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
-import { PageContext } from '../context/UserContext'
+import { PageContext, userReducer } from '../context/UserContext'
 import { changeActiveLink } from '../functions/changeActiveLink'
+import { UseFetch } from '../hooks/UseFetch'
 
 export const History = () => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
 
-  changeActiveLink(
-    window.location.pathname,
-    ctx.user.url,
-    ctx.dispatch
-  )
+  useEffect(() => {
+    // update context with current url pathname
+    changeActiveLink(
+      window.location.pathname,
+      ctx.user.url,
+      ctx.dispatch
+    )
+  
+    // redirect to login if not logged in
+    if ( ctx.user.loginState !== true ) navigate( '/login' )  
+  }, [])
 
-  if ( ctx.user.loginState !== true ) navigate( '/login' )
-
-  const [ transactions, setTransactions ] = useState( [] )
+  const [ transactions, setTransactions ] = useState<any>( [] )
 
   useEffect(() => {
-    fetch( `http://localhost:4200/users/transactions`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'id': ctx.user.details.id
-      })
+    UseFetch( 'POST', '/users/transactions', {
+      body: { id: ctx.user.details.id }
     })
     .then( res => res.json() )
     .then( data => setTransactions( data ))
@@ -40,7 +38,7 @@ export const History = () => {
         <div className='history__container'>
           <div className='history__row'>
             <div className='history__date'>
-              { new Date( ctx.user.details.createdAt ).toLocaleDateString() }
+              { new Date( transactions[0]?.createdAt ?? Date.now() ).toLocaleDateString() }
             </div>
             <div className='history__text'>
               Account opened.

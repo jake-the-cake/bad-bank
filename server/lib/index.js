@@ -28,6 +28,7 @@ mongoose_1.default
     .then(() => {
     console.log('database connected');
 });
-app.listen(4200, () => {
-    console.log('server connected on 4200');
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`server connected on ${port}`);
 });

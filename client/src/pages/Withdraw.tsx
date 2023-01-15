@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { MainCard } from '../components/MainCard'
 import { TransactionForm } from '../components/TransactionForm'
@@ -9,13 +9,17 @@ export const Withdraw = () => {
   const ctx = useContext( PageContext )
   const navigate = useNavigate()
 
-  changeActiveLink(
-    window.location.pathname,
-    ctx.user.url,
-    ctx.dispatch
-  )
-
-  if ( ctx.user.loginState !== true ) navigate( '/login' )
+  useEffect(() => {
+    // update context with current url pathname
+    changeActiveLink(
+      window.location.pathname,
+      ctx.user.url,
+      ctx.dispatch
+    )
+  
+    // redirect to login if not logged in
+    if ( ctx.user.loginState !== true ) navigate( '/login' )  
+  }, [])
 
   return (
     <MainCard
